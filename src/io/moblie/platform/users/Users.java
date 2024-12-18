@@ -7,8 +7,7 @@ public class Users {
     private String sex;
     private String phoneNumber;
 
-    public Users(final String userId, final String userName, final String userEmail, final String sex,
-                 final String jobTitle, final String phoneNumber) {
+    public Users(final String userId, final String userName, final String userEmail, final String sex, final String phoneNumber) {
         this.userId = userId;
         this.userName = userName;
         this.userEmail = userEmail;
