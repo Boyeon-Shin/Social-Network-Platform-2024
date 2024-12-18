@@ -3,19 +3,6 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-# 상위 디렉터리 허용
-!src/
-!src/io/
-!src/io/mobile/
-!src/io/mobile/platform/
-!src/io/mobile/conf/
-
-src/io/moblie/conf/Conf.java
-
-
-# Conf.java만 무시
-src/io/mobile/conf/Conf.java
-
 ### Eclipse ###
 .apt_generated
 .classpath
