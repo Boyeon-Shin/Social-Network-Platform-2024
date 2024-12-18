@@ -1,4 +1,4 @@
-package io.moblie.platform.feed;
+package io.moblie.platform.comment;
 
 import io.moblie.conf.Conf;
 
@@ -7,33 +7,32 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FeedService {
-    private static Feed setFeed(ResultSet rs) throws SQLException {
-        int feedId = rs.getInt("feed_id");
-        String feedDetail = rs.getString("feed_detail");
+public class CommentService {
+
+    private static Comment setComment(ResultSet rs) throws SQLException {
+        int commentId = rs.getInt("comment_id");
+        String commentDetail = rs.getString("comment_detail");
         Date timestamp = rs.getDate("timestamp");
         String userId = rs.getString("user_id");
 
-        return new Feed(feedId, feedDetail, timestamp, userId);
+        return new Comment(commentId, commentDetail, timestamp, userId);
     }
 
-    public static List<Feed> selectAll() {
+    public static List<Comment> selectAll() {
         ResultSet rs = null;
         PreparedStatement psmtQuery = null;
 
-        List<Feed> feedList = new ArrayList<>();
+        List<Comment> commentList = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(Conf.DB_URL, Conf.DB_USER, Conf.DB_PASSWORD)) {
-            String query = "SELECT * FROM feed";
-
+            String query = "SELECT * FROM comment";
             psmtQuery = conn.prepareStatement(query);
             rs = psmtQuery.executeQuery();
-
             while (rs.next()) {
-                Feed feed = setFeed(rs);
-                feedList.add(feed);
+                Comment comment = setComment(rs);
+                commentList.add(comment);
             }
-            return feedList;
+            return commentList;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -55,34 +54,24 @@ public class FeedService {
         }
     }
 
-    public static Feed selectById(final int feedId) {
+    public static Comment selectById(int commentId) {
         ResultSet rs = null;
         PreparedStatement psmtQuery = null;
 
         try (Connection conn = DriverManager.getConnection(Conf.DB_URL, Conf.DB_USER, Conf.DB_PASSWORD)) {
-            String query = "SELECT * FROM feed WHERE feed_id = ?";
-
+            String query = "SELECT * FROM comment WHERE comment_id = ?";
             psmtQuery = conn.prepareStatement(query);
-            psmtQuery.setInt(1, feedId);
+            psmtQuery.setInt(1, commentId);
             rs = psmtQuery.executeQuery();
 
             if (rs.next()) {
-                Feed feed = setFeed(rs);
-                return feed;
-            } else {
-                return null;
+                return setComment(rs);
             }
+            return null;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         } finally {
-            if (psmtQuery != null) {
-                try {
-                    psmtQuery.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             if (rs != null) {
                 try {
                     rs.close();
@@ -90,10 +79,17 @@ public class FeedService {
                     e.printStackTrace();
                 }
             }
+            if (psmtQuery != null) {
+                try {
+                    psmtQuery.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
-    public static int insert(String feedDetail, Date timestamp, String userId) {
+    public static int insert(String commentDetail, Date timestamp, String userId, int feedId) {
         ResultSet rs = null;
         PreparedStatement psmtQuery = null;
         PreparedStatement psmtInsert = null;
@@ -101,25 +97,26 @@ public class FeedService {
         try (Connection conn = DriverManager.getConnection(Conf.DB_URL, Conf.DB_USER, Conf.DB_PASSWORD)) {
             conn.setAutoCommit(false);
 
-            String query = "SELECT MAX(feed_id) FROM feed";
+            String query = "SELECT MAX(comment_id) FROM comment";
             psmtQuery = conn.prepareStatement(query);
             rs = psmtQuery.executeQuery();
 
-            int newFeedId = 1;
+            int newCommentId = 1;
             if (rs.next() && rs.getInt(1) > 0) {
-                newFeedId = rs.getInt(1) + 1;
+                newCommentId = rs.getInt(1) + 1;
             }
 
-            String insertStatement = "INSERT INTO feed (feed_id, feed_detail, timestamp, user_id) VALUES (?, ?, ?, ?)";
+            String insertStatement = "INSERT INTO comment (comment_id, comment_detail, timestamp, user_id, feed_id) VALUES (?, ?, ?, ?, ?)";
             psmtInsert = conn.prepareStatement(insertStatement);
-            psmtInsert.setInt(1, newFeedId);
-            psmtInsert.setString(2, feedDetail);
+            psmtInsert.setInt(1, newCommentId);
+            psmtInsert.setString(2, commentDetail);
             psmtInsert.setDate(3, new java.sql.Date(timestamp.getTime()));
             psmtInsert.setString(4, userId);
+            psmtInsert.setInt(5, feedId);
 
             if (psmtInsert.executeUpdate() > 0) {
                 conn.commit();
-                return newFeedId;
+                return newCommentId;
             } else {
                 conn.rollback();
                 return -1;
@@ -128,6 +125,13 @@ public class FeedService {
             e.printStackTrace();
             return -1;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
             if (psmtQuery != null) {
                 try {
                     psmtQuery.close();
@@ -142,25 +146,18 @@ public class FeedService {
                     e.printStackTrace();
                 }
             }
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
-    public static int update(int feedId, String feedDetail, Date timestamp) {
+    public static int update(int commentId, String commentDetail, Date timestamp) {
         PreparedStatement psmtUpdate = null;
 
         try (Connection conn = DriverManager.getConnection(Conf.DB_URL, Conf.DB_USER, Conf.DB_PASSWORD)) {
-            String updateStatement = "UPDATE feed SET feed_detail = ?, timestamp = ? WHERE feed_id = ?";
+            String updateStatement = "UPDATE comment SET comment_detail = ?, timestamp = ? WHERE comment_id = ?";
             psmtUpdate = conn.prepareStatement(updateStatement);
-            psmtUpdate.setString(1, feedDetail);
+            psmtUpdate.setString(1, commentDetail);
             psmtUpdate.setDate(2, new java.sql.Date(timestamp.getTime()));
-            psmtUpdate.setInt(3, feedId);
+            psmtUpdate.setInt(3, commentId);
 
             return psmtUpdate.executeUpdate();
         } catch (SQLException e) {
@@ -177,39 +174,22 @@ public class FeedService {
         }
     }
 
-    public static int deleteById(int feedId) {
-        PreparedStatement psmtDeleteComments = null;
-        PreparedStatement psmtDeleteFeed = null;
+    public static int deleteById(int commentId) {
+        PreparedStatement psmtDelete = null;
 
         try (Connection conn = DriverManager.getConnection(Conf.DB_URL, Conf.DB_USER, Conf.DB_PASSWORD)) {
-            conn.setAutoCommit(false);
+            String deleteStatement = "DELETE FROM comment WHERE comment_id = ?";
+            psmtDelete = conn.prepareStatement(deleteStatement);
+            psmtDelete.setInt(1, commentId);
 
-            String deleteCommentsQuery = "DELETE FROM comment WHERE feed_id = ?";
-            psmtDeleteComments = conn.prepareStatement(deleteCommentsQuery);
-            psmtDeleteComments.setInt(1, feedId);
-            psmtDeleteComments.executeUpdate();
-
-            String deleteFeedQuery = "DELETE FROM feed WHERE feed_id = ?";
-            psmtDeleteFeed = conn.prepareStatement(deleteFeedQuery);
-            psmtDeleteFeed.setInt(1, feedId);
-
-            int rowsAffected = psmtDeleteFeed.executeUpdate();
-            conn.commit();
-            return rowsAffected;
+            return psmtDelete.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             return 0;
         } finally {
-            if (psmtDeleteComments != null) {
+            if (psmtDelete != null) {
                 try {
-                    psmtDeleteComments.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (psmtDeleteFeed != null) {
-                try {
-                    psmtDeleteFeed.close();
+                    psmtDelete.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
