@@ -7,6 +7,7 @@ out/
 !src/
 !src/io/
 !src/io/mobile/
+!src/io/mobile/platform/
 !src/io/mobile/conf/
 
 src/io/moblie/conf/Conf.java
