@@ -9,12 +9,12 @@ import java.util.List;
 
 public class FeedService {
     private static Feed setFeed(ResultSet rs) throws SQLException {
-        int FeedId = rs.getInt("feed_id");
+        int feedId = rs.getInt("feed_id");
         String feedDetail = rs.getString("feed_detail");
         Date timestamp = rs.getDate("timestamp");
         String userId = rs.getString("user_id");
 
-        return new Feed(FeedId, feedDetail, timestamp, userId);
+        return new Feed(feedId, feedDetail, timestamp, userId);
     }
 
     public static List<Feed> selectAll() {
@@ -73,7 +73,7 @@ public class FeedService {
         }
     }
 
-    private static String insert(String feedDetail, Date timestamp, String userId) {
+    public static int insert(String feedDetail, Date timestamp, String userId) {
         ResultSet rs = null;
         PreparedStatement psmtQuery = null;
         PreparedStatement psmtInsert = null;
@@ -85,34 +85,30 @@ public class FeedService {
             psmtQuery = conn.prepareStatement(query);
             rs = psmtQuery.executeQuery();
 
-            int newFeedId = 1;
-            if (rs.next() && rs.getString(1) != null) {
-                newFeedId = Integer.parseInt(rs.getString(1)) + 1;
+            int newFeedId = 1; // 기본값
+            if (rs.next() && rs.getInt(1) > 0) {
+                newFeedId = rs.getInt(1) + 1;
             }
-
-            // 00001~99999
-            String formattedFeedId = String.format("%05d", newFeedId);
 
             // INSERT 쿼리 작성
             String insertStatement = "INSERT INTO feed (feed_id, feed_detail, timestamp, user_id) VALUES (?, ?, ?, ?)";
             psmtInsert = conn.prepareStatement(insertStatement);
-            psmtInsert.setString(1, formattedFeedId);
+            psmtInsert.setInt(1, newFeedId); // feed_id를 INTEGER 타입으로 설정
             psmtInsert.setString(2, feedDetail);
             psmtInsert.setDate(3, new java.sql.Date(timestamp.getTime()));
             psmtInsert.setString(4, userId);
 
             if (psmtInsert.executeUpdate() > 0) {
                 conn.commit();
-                return formattedFeedId;
+                return newFeedId; // 성공 시 새 feed_id 반환
             } else {
                 conn.rollback();
-                return null;
+                return -1; // 실패 시 -1 반환
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return -1;
         } finally {
-            // 리소스 정리
             if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
             if (psmtQuery != null) try { psmtQuery.close(); } catch (SQLException ignored) {}
             if (psmtInsert != null) try { psmtInsert.close(); } catch (SQLException ignored) {}
