@@ -6,7 +6,7 @@ import java.util.List;
 public class FeedMain {
     public static void main(String[] args) {
         // 1. 전체 피드 정보 검색
-        System.out.println("\n전체 피드 정보 검색\n ------------------------");
+        System.out.println("\n전체 피드 정보 검색\n -------------------------");
         List<Feed> feedList = FeedService.selectAll();
         for (Feed feed : feedList) {
             System.out.println(feed);
@@ -62,3 +62,4 @@ public class FeedMain {
         }
     }
 }
+
