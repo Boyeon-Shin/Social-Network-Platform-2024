@@ -28,7 +28,7 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-.xml
+*.xml
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/java,macos
