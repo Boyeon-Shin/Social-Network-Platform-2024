@@ -205,12 +205,14 @@ public class UserService {
     public static int deleteById(String userId) {
         ResultSet rs = null;
         PreparedStatement psmtQuery = null;
-        PreparedStatement psmtDeleteFeed = null;
         PreparedStatement psmtDeleteComment = null;
+        PreparedStatement psmtDeleteFeed = null;
+        PreparedStatement psmtDeleteFriend = null;
         PreparedStatement psmtDeleteUser = null;
 
+
         try (Connection conn = DriverManager.getConnection(Conf.DB_URL, Conf.DB_USER, Conf.DB_PASSWORD)) {
-            String query = "SELECT * FROM comment WHERE user_id = ? ";
+            String query = "SELECT * FROM users WHERE user_id = ? ";
             psmtQuery = conn.prepareStatement(query);
             psmtQuery.setString(1, userId);
 
@@ -224,7 +226,6 @@ public class UserService {
                 psmtDeleteComment.executeUpdate();
 
 
-
                 String deleteStatement2 =
                         "DELETE FROM feed WHERE user_id = ? ";
                 psmtDeleteFeed= conn.prepareStatement(deleteStatement2);
@@ -232,9 +233,15 @@ public class UserService {
                 psmtDeleteFeed.executeUpdate();
 
                 String deleteStatement3 =
-                        "DELETE FROM users WHERE user_id = ? ";
+                        "DELETE FROM friend WHERE user_id = ? OR friend_id = ?";
+                psmtDeleteFriend = conn.prepareStatement(deleteStatement3);
+                psmtDeleteFriend.setString(1, userId);
+                psmtDeleteFriend.setString(2, userId);
+                psmtDeleteFriend.executeUpdate();
 
-                psmtDeleteUser = conn.prepareStatement(deleteStatement3);
+                String deleteStatement4 =
+                        "DELETE FROM users WHERE user_id = ?";
+                psmtDeleteUser = conn.prepareStatement(deleteStatement4);
                 psmtDeleteUser.setString(1, userId);
 
                 return psmtDeleteUser.executeUpdate();
