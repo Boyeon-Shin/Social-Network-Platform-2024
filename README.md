@@ -105,3 +105,24 @@ Social-Network-Platform은 Java와 JDBC를 활용해 제작된 소셜 네트워�
 —
 
 ## 실행 결과
+
+<h3>usersMain 실행 결과</h3>
+
+<img width="993" alt="image" src="https://github.com/user-attachments/assets/0ce0748f-379a-4124-9fd1-b7c514f2f4d8" />
+
+<h3>feedMain 실행 결과</h3>
+
+<img width="817" alt="image" src="https://github.com/user-attachments/assets/0c8d588c-64f7-41b0-9de3-ef96844008f7" />
+
+
+<h3>cimmentMain 실행 결과</h3>
+
+<img width="1016" alt="image" src="https://github.com/user-attachments/assets/50f4351f-d689-4380-8cf4-a97527adde6e" />
+
+
+<h3>friend 실행 결과</h3>
+
+<img width="996" alt="image" src="https://github.com/user-attachments/assets/7617fe78-747d-483a-a3ca-dcd3641bd51c" />
+
+
+
