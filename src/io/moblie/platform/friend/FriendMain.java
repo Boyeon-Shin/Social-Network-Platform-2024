@@ -23,7 +23,12 @@ public class FriendMain {
 
         System.out.println("\n친구 관계 추가하기\n--------------------------------------------------------------------------------------------");
         if (FriendService.insert("user02", "user01") > 0) {
-            System.out.println("친구 관계가 성공적으로 이뤄졌습니다.");
+            Friend friendship = FriendService.selectFriendshipById("user02", "user01");
+            if(friendship != null) {
+                System.out.println("친구 관계가 성공적으로 이뤄졌습니다.");
+            } else{
+                System.out.println("존재하지 않는 친구 관계입니다.");
+            }
         } else {
             System.out.println("이미 존재하는 친구 관계입니다.");
         }

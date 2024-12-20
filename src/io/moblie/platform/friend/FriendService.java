@@ -17,7 +17,6 @@ public class FriendService {
         return new Friend(userId, friendId);
     }
 
-    // 모든 친구 관계 조회
     public static List<Friend> selectAll() {
         ResultSet rs = null;
         PreparedStatement psmtQuery = null;
