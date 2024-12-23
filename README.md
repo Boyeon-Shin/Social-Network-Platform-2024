@@ -4,7 +4,6 @@ Social-Network-Platform은 Java와 JDBC를 활용해 제작된 소셜 네트워�
 사용자 관리, 피드 관리, 댓글 관리, 친구 관계 관리 등 소셜 네트워크의 핵심 기능을 구현했습니다.
 
 </br>
-</br>
 
 
 ## 주요 기능
@@ -13,7 +12,6 @@ Social-Network-Platform은 Java와 JDBC를 활용해 제작된 소셜 네트워�
 3. 댓글 관리 </br>
 4. 친구 관계 관리
    
-</br>
 </br>
 
 ## 요구사항 정의
