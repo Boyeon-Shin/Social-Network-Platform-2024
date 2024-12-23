@@ -153,4 +153,9 @@ Social-Network-Platform은 Java와 JDBC를 활용해 제작된 소셜 네트워�
 <img width="996" alt="image" src="https://github.com/user-attachments/assets/7617fe78-747d-483a-a3ca-dcd3641bd51c" />
 
 
+---
 
+## 프로젝트 참여자
+
+@Boyeon-Shin </br>
+@pingmong
