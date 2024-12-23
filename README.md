@@ -91,7 +91,35 @@ Social-Network-Platform은 Java와 JDBC를 활용해 제작된 소셜 네트워�
 
 
 </br>
+
+---
+
+## 기대 효과
+
+<h3>효율적인 사용자 관리</h3>
+사용자 정보와 친구 관계를 데이터베이스로 체계적으로 관리하여 데이터의 신뢰성을 높일 수 있습니다.
+
+<h3>게시물과 댓글 관리의 간편화</h3>
+사용자 생성 콘텐츠(게시물 및 댓글)를 효율적으로 저장 및 검색할 수 있어, 소셜 플랫폼의 성능을 향상시킵니다.
+
+<h3>확장 가능성</h3>
+현재 데이터 모델은 새로운 기능(예: 메시지, 그룹 등)을 쉽게 추가할 수 있도록 설계되었습니다.
+
+---
+
+## 구현 과정
+
+<li>요구사항 분석 및 데이터베이스 설계</li>
 </br>
+<li>ERD 기반 테이블 작성 및 데이터 스키마 생성</li>
+</br>
+<li>JDBC를 활용한 CRUD 기능 구현</li>
+</br>
+<li>예제 데이터를 활용한 테스트 및 결과 확인</li>
+
+</br>
+
+---
 
 <img width="580" alt="KakaoTalk_Photo_2024-12-20-15-51-12" src="https://github.com/user-attachments/assets/2c2ac53d-46f7-488d-babe-db89e9c56ddc" />
 
@@ -120,7 +148,7 @@ Social-Network-Platform은 Java와 JDBC를 활용해 제작된 소셜 네트워�
 <img width="1016" alt="image" src="https://github.com/user-attachments/assets/50f4351f-d689-4380-8cf4-a97527adde6e" />
 
 
-<h3>friend 실행 결과</h3>
+<h3>friend 실행 결과</h3>
 
 <img width="996" alt="image" src="https://github.com/user-attachments/assets/7617fe78-747d-483a-a3ca-dcd3641bd51c" />
 
